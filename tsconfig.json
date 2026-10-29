@@ -1,0 +1,9 @@
+{
+	"extends": "./tsconfig.base.json",
+	"compilerOptions": {
+		"noEmit": true,
+		"types": ["vitest/globals", "node"]
+	},
+	"include": ["packages/**/*.ts", "tests/**/*.ts", "rollup.config.js", "eslint.config.js", "playwright.config.ts"],
+	"exclude": ["tests/e2e/fixtures/**"]
+}

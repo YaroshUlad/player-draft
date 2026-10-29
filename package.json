@@ -1,0 +1,51 @@
+{
+	"name": "vktv-player-draft",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"workspaces": [
+		"packages/*",
+		"packages/engines/*",
+		"packages/extensions/*",
+		"packages/infrastructure/*"
+	],
+	"scripts": {
+		"build": "npm run build:types && npm run build:bundles",
+		"build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly",
+		"build:bundles": "rollup -c",
+		"dev": "npm run build && tsx ops/dev-server.ts",
+		"dev:server": "tsx ops/dev-server.ts",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"lint": "eslint .",
+		"test": "npm run typecheck && npm run lint && npm run test:unit && npm run test:contract && npm run build",
+		"test:unit": "vitest run tests/unit",
+		"test:contract": "vitest run tests/contract",
+		"test:e2e": "npm run build && playwright test"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.26.0",
+		"@babel/preset-env": "^7.26.0",
+		"@eslint/js": "^9.17.0",
+		"@playwright/test": "^1.64.1",
+		"@rollup/plugin-babel": "^6.0.4",
+		"@rollup/plugin-commonjs": "^28.0.9",
+		"@rollup/plugin-node-resolve": "^15.3.0",
+		"@rollup/plugin-terser": "^0.4.4",
+		"@rollup/plugin-typescript": "^12.1.1",
+		"@types/node": "^20.19.43",
+		"eslint": "^9.17.0",
+		"rollup": "^4.29.1",
+		"tsx": "^4.23.15",
+		"typescript": "^5.7.2",
+		"typescript-eslint": "^8.18.1",
+		"vitest": "^2.1.8"
+	},
+	"dependencies": {
+		"hls.js": "^1.0.5",
+		"shaka-player": "5.3.2",
+		"tslib": "^2.8.1"
+	}
+}

@@ -1,0 +1,9 @@
+{
+	"name": "@vktv-player/shaka-engine",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"dependencies": {
+		"shaka-player": "5.3.2"
+	}
+}
