@@ -53,6 +53,33 @@ describe('PlayerLib public contract', () => {
 		expect(details[details.length - 1]).toEqual({time: 2_000});
 	});
 
+	it('autoplays by default unless playback settings disable it', async () => {
+		const {player} = createPlayer();
+		await initPlayer(player);
+		const item = {...fakePlaylistItem, playback: {}};
+
+		await player.open(item);
+		expect(player.getPlaybackInterface().getState()).toBe('playing');
+
+		await player.open({...item, playback: {isAutoplay: false}});
+		expect(player.getPlaybackInterface().getState()).toBe('ready');
+
+		await player.open({...item, playback: {isAutoplaySettingEnabled: false}});
+		expect(player.getPlaybackInterface().getState()).toBe('ready');
+	});
+
+	it('resumes from startPosition when lastPosition is zero', async () => {
+		const {player} = createPlayer();
+		await initPlayer(player);
+
+		await player.open({
+			...fakePlaylistItem,
+			playback: {startPosition: 5_000, lastPosition: 0, isAutoplay: false}
+		});
+
+		expect(player.getPlaybackInterface().getStateInfo().currentTime).toBe(5_000);
+	});
+
 	it('supports playback methods and close/reopen lifecycle', async () => {
 		const {player} = createPlayer();
 		await initPlayer(player);
@@ -72,6 +99,26 @@ describe('PlayerLib public contract', () => {
 
 		await player.destroy();
 		expect(player.isInitialized()).toBe(false);
+	});
+
+	it('keeps player-ds quality and track event compatibility', async () => {
+		const {player, factory, eventTarget} = createPlayer();
+		await initPlayer(player);
+		await player.open(fakePlaylistItem);
+		const playback = player.getPlaybackInterface();
+		await playback.setQuality('360p', null as unknown as number);
+		let detail: unknown;
+		eventTarget.addEventListener('playback-properties-update', (event) => {
+			detail = (event as CustomEvent).detail;
+		});
+		factory.adapters[0]?.emit({type: 'tracksChange'});
+
+		expect(playback.getCurrentQualityType()).toBe('360p');
+		expect(detail).toMatchObject({
+			audioTracks: [{name: 'Default', description: 'und', value: 'default'}],
+			currentAudioTrackIndex: 0,
+			textTracks: []
+		});
 	});
 
 	it('validates token updates', async () => {

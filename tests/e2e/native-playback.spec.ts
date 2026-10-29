@@ -101,8 +101,8 @@ test('native MP4 works through the public facade without UI', async ({page}) => 
 				type: 'video',
 				files: {mp4720: '/video.mp4'}
 			},
-			playback: {isAutoplay: false}
-		}, {autoplay: false, muted: true, startPositionMs: 500});
+			playback: {startPosition: 500, lastPosition: 0, isAutoplay: false}
+		}, {autoplay: false, muted: true});
 	});
 
 	const playbackState = (): Promise<string> => page.evaluate(() => {
@@ -148,11 +148,21 @@ test('native MP4 works through the public facade without UI', async ({page}) => 
 		return {
 			events: browserWindow.playerEvents,
 			controls: video?.controls,
-			videoCount: document.querySelectorAll('video').length
+			videoCount: document.querySelectorAll('video').length,
+			uiSlotChildCount: document.getElementById('player-surface')?.childElementCount,
+			containerClass: video?.parentElement?.className,
+			isFirstBodyChild: video?.parentElement === document.body.firstElementChild,
+			videoWidth: video?.style.width,
+			videoHeight: video?.style.height
 		};
 	});
 	expect(browserState.controls).toBe(false);
 	expect(browserState.videoCount).toBe(1);
+	expect(browserState.uiSlotChildCount).toBe(0);
+	expect(browserState.containerClass).toBe('html5-video-container');
+	expect(browserState.isFirstBodyChild).toBe(true);
+	expect(browserState.videoWidth).toBe('100%');
+	expect(browserState.videoHeight).toBe('100%');
 	expect(browserState.events).toContain('player-first-frame');
 	expect(browserState.events).toContain('player-playing');
 	expect(browserState.events).toContain('player-paused');

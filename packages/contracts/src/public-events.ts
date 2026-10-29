@@ -1,17 +1,31 @@
-import type {AudioTrack, QualityType, TextTrack} from './playback';
+import type {QualityType} from './playback';
 import type {AdSection, TvProgrammeItem} from './playlist-item';
 
 export type {AdSection} from './playlist-item';
 export type RecoveryFailureReason = 'recover-fail' | 'playback-is-not-available' | 'no-internet';
+
+export interface PlaybackAudioTrack {
+	name: string;
+	description: string;
+	value: string;
+}
+
+export interface PlaybackTextTrack {
+	id: string;
+	name: string;
+	lang: string;
+	url?: string;
+	isAuto: boolean;
+}
 
 export interface PlaybackPropertiesUpdate {
 	qualities?: readonly {value: QualityType; name: string; disabled?: boolean}[];
 	currentQualityIndex?: number;
 	currentPlaybackRateIndex?: number;
 	playbackRates?: readonly {name: string; value: number}[];
-	audioTracks?: readonly AudioTrack[];
+	audioTracks?: readonly PlaybackAudioTrack[];
 	currentAudioTrackIndex?: number | null;
-	textTracks?: readonly TextTrack[];
+	textTracks?: readonly PlaybackTextTrack[];
 }
 
 export interface ProductStatEvent {
@@ -46,7 +60,7 @@ export interface PublicEventMap {
 	'playback-properties-update': PlaybackPropertiesUpdate;
 	'player-recovery-failed': {reason: RecoveryFailureReason};
 	'player-live-status-changed': {from: string; to: string};
-	'tv-channel-server-time-update': {serverTime: number};
+	'tv-channel-server-time-update': {time: number; serverTime: number};
 	'tv-channel-programme-update': {current: TvProgrammeItem | null; next: TvProgrammeItem | null};
 	'player-advertisement-start': {data: AdvertisementStartData};
 	'player-advertisement-started-playing': undefined;

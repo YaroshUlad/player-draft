@@ -97,7 +97,9 @@ export class StatsExtension implements PlayerExtension {
 				stream_profile: event.snapshot.live.isLive ? 'live' : 'vod'
 			});
 			const autoplay = this.pendingOptions?.autoplay ?? Boolean(
-				session.item && this.pendingItem?.playback.isAutoplay && this.pendingItem.playback.isAutoplaySettingEnabled !== false
+				session.item && this.pendingItem &&
+				this.pendingItem.playback.isAutoplay !== false &&
+				this.pendingItem.playback.isAutoplaySettingEnabled !== false
 			);
 			if (autoplay) {
 				this.emit(session, 'play', {});

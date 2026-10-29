@@ -7,6 +7,7 @@ class FakeVideo extends EventTarget {
 	controls = false;
 	preload = '';
 	playsInline = false;
+	style: Partial<CSSStyleDeclaration> = {};
 	muted = false;
 	volume = 1;
 	playbackRate = 1;

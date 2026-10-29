@@ -74,7 +74,7 @@ export class TvChannelExtension implements PlayerExtension {
 		this.programme = programme;
 		this.serverTime = serverTime;
 		if (item.model.showProgram) {
-			this.options.dispatcher.dispatch('tv-channel-server-time-update', {serverTime});
+			this.options.dispatcher.dispatch('tv-channel-server-time-update', {time: serverTime, serverTime});
 			this.options.dispatcher.dispatch('tv-channel-programme-update', {
 				current: this.getCurrentProgrammeItem(),
 				next: this.getNextProgrammeItem()

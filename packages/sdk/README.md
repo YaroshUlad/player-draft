@@ -27,6 +27,8 @@ Compatibility facade и composition root headless SDK.
 
 `init → beforeOpen → aroundOpen → playback session → extensions shutdown → core destroy`. Stats и orchestration extensions завершаются до уничтожения core session. UI и `MsgChannel` не создаются.
 
+По умолчанию `open()` запускает воспроизведение; явные `autoplay: false`, `isAutoplay: false` и `isAutoplaySettingEnabled: false` отключают автозапуск. Video surface создается отдельно от `InitData.node`: `.html5-video-container` вставляется первым элементом в `document.body` и удаляется при shutdown.
+
 ## Проверки
 
 - `tests/contract/player-lib.test.ts`

@@ -41,12 +41,25 @@ export class CustomEventBridge implements PlayerExtension {
 					dispatcher.dispatch('player-quality-changed', {quality: event.snapshot.quality.current});
 				}
 				break;
-			case 'tracksChange':
+			case 'tracksChange': {
+				const currentAudioTrackIndex = event.snapshot.audioTracks.findIndex((track) => track.isDefault);
 				dispatcher.dispatch('playback-properties-update', {
-					audioTracks: event.snapshot.audioTracks,
-					textTracks: event.snapshot.textTracks
+					audioTracks: event.snapshot.audioTracks.map((track) => ({
+						name: track.name,
+						description: track.language,
+						value: track.id
+					})),
+					currentAudioTrackIndex: currentAudioTrackIndex >= 0 ? currentAudioTrackIndex : null,
+					textTracks: event.snapshot.textTracks.map((track) => ({
+						id: track.id,
+						name: track.name,
+						lang: track.language,
+						...(track.url ? {url: track.url} : {}),
+						isAuto: track.isAuto
+					}))
 				});
 				break;
+			}
 			default:
 				break;
 		}

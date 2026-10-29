@@ -42,7 +42,7 @@ export class PublicPlaybackImpl implements PublicPlayback {
 
 	async setQuality(quality: QualityType, playbackRate?: number): Promise<void> {
 		await this.core.setQuality(quality, this.command('setQuality'));
-		if (playbackRate !== undefined) {
+		if (playbackRate != null) {
 			await this.setPlaybackRate(playbackRate);
 		}
 	}

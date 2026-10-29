@@ -38,8 +38,8 @@ export class RecoveryExtension implements PlayerExtension {
 		let lastError: unknown = null;
 		this.opening = true;
 		this.generation++;
-		this.lastPositionMs = context.options.startPositionMs ?? context.item.playback.lastPosition ??
-			context.item.playback.startPosition ?? 0;
+		this.lastPositionMs = context.options.startPositionMs ?? context.item.playback.startPosition ??
+			context.item.playback.lastPosition ?? 0;
 
 		try {
 			for (let index = 0; index < candidates.length; index++) {

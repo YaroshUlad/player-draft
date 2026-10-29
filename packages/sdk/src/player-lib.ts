@@ -63,6 +63,7 @@ export class PlayerLib implements IPlayerLib {
 	private initData: InitData | null = null;
 	private capabilities: DeviceCapabilities = DEFAULT_CAPABILITIES;
 	private currentItem: PlaylistItem | null = null;
+	private playbackSurface: HTMLElement | null = null;
 	private operationCounter = 0;
 	private viewMode: ViewMode = 'fullscreen';
 
@@ -78,7 +79,7 @@ export class PlayerLib implements IPlayerLib {
 		});
 		const advertisement = new AdsExtension({
 			core: this.core,
-			getSurface: () => this.initData?.node ?? document.createElement('div'),
+			getSurface: () => this.getPlaybackSurface(),
 			getCapabilities: () => this.capabilities,
 			dispatcher
 		});
@@ -168,11 +169,11 @@ export class PlayerLib implements IPlayerLib {
 			throw new Error('Player must be initialized before open');
 		}
 		const source = this.sourcePlanner.getInitialSource(item.model.files, this.capabilities);
-		const autoplay = options.autoplay ?? Boolean(
-			item.playback.isAutoplay && item.playback.isAutoplaySettingEnabled !== false
+		const autoplay = options.autoplay ?? (
+			item.playback.isAutoplay !== false && item.playback.isAutoplaySettingEnabled !== false
 		);
-		const startPositionMs = options.startPositionMs ?? item.playback.lastPosition ?? item.playback.startPosition ?? 0;
-		const surface = this.initData.node;
+		const startPositionMs = options.startPositionMs ?? item.playback.startPosition ?? item.playback.lastPosition ?? 0;
+		const surface = this.getPlaybackSurface();
 
 		await this.extensionHost.beforeOpen(item, options);
 		await this.extensionHost.open(item, options, source, async (nextSource, recoveryPositionMs) => {
@@ -199,6 +200,7 @@ export class PlayerLib implements IPlayerLib {
 		await this.previewService.stop();
 		await this.extensionHost.shutdown();
 		await this.core.destroy();
+		this.removePlaybackSurface();
 		this.currentItem = null;
 	}
 
@@ -246,5 +248,35 @@ export class PlayerLib implements IPlayerLib {
 
 	getViewMode(): ViewMode {
 		return this.viewMode;
+	}
+
+	private getPlaybackSurface(): HTMLElement {
+		if (this.playbackSurface) {
+			return this.playbackSurface;
+		}
+		if (typeof document === 'undefined') {
+			if (!this.initData) {
+				throw new Error('Player must be initialized before creating a playback surface');
+			}
+			return this.initData.node;
+		}
+
+		const surface = document.createElement('div');
+		surface.className = 'html5-video-container';
+		surface.style.position = 'absolute';
+		surface.style.left = '0';
+		surface.style.top = '0';
+		surface.style.width = '100%';
+		surface.style.height = '100%';
+		surface.style.overflow = 'hidden';
+		surface.style.backgroundColor = 'black';
+		document.body.insertBefore(surface, document.body.firstChild);
+		this.playbackSurface = surface;
+		return surface;
+	}
+
+	private removePlaybackSurface(): void {
+		this.playbackSurface?.remove();
+		this.playbackSurface = null;
 	}
 }

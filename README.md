@@ -47,6 +47,12 @@ Headless Smart TV player SDK на TypeScript. Проект создается о
 
 Shaka настроен с `bufferingGoal: 10`, `bufferBehind: 2`, `rebufferingGoal: 2`. После seek буфер очищается через variant switch с `clearBuffer=true, safeMargin=0`, на destroy вызывается `unload(false)`.
 
+## Автоплей и video surface
+
+`open()` запускает воспроизведение по умолчанию. Передать `options.autoplay: false`, `playback.isAutoplay: false` или `playback.isAutoplaySettingEnabled: false`, если автозапуск не нужен. Ограничения браузера на звук не обходятся: для автоплея без пользовательского действия может потребоваться `options.muted: true`.
+
+Как и в legacy SDK, основной `<video>` монтируется в отдельный `.html5-video-container`, который вставляется первым элементом в `document.body`. Переданный `InitData.node` не используется как video surface, поэтому скрытый UI-слот `player-ds` остается пустым. Контейнер удаляется при `close()`, `shutdown()` и `destroy()`.
+
 ## Локальный запуск
 
 ```bash
@@ -54,6 +60,12 @@ npm run dev
 ```
 
 По адресу `http://127.0.0.1:4173` сервер отдает `playerLib` bundle. Тестовая страница доступна по `http://127.0.0.1:4173/demo`. Команда собирает SDK и запускает сервер с MP4, HLS и DASH fixtures. Для повторного запуска без сборки используется `npm run dev:server`. Подробности в `ops/README.md`.
+
+## Интеграция с player-ds
+
+Для `vktv` используется `PLAYER_LIB_URL=http://127.0.0.1:4173`: по этому URL dev server отдает текущий bundle. `player-ds` уже использует document `CustomEvent`, поэтому `onMessage` не требуется. Общие externs остальных сцен не сужаются.
+
+Поддержаны player-ds-specific совместимости: `setQuality(..., null)`, `detail.time` и `detail.serverTime` у `tv-channel-server-time-update`, а также audio tracks `{name, description, value}` и text tracks `{id, name, lang, url, isAuto}`.
 
 ## Проверки
 

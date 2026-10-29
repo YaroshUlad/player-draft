@@ -109,6 +109,14 @@ export class SubtitlesExtension implements PlayerExtension {
 	}
 
 	private dispatchProperties(): void {
-		this.options.dispatcher.dispatch('playback-properties-update', {textTracks: this.tracks});
+		this.options.dispatcher.dispatch('playback-properties-update', {
+			textTracks: this.tracks.map((track) => ({
+				id: track.id,
+				name: track.name,
+				lang: track.language,
+				...(track.url ? {url: track.url} : {}),
+				isAuto: track.isAuto
+			}))
+		});
 	}
 }

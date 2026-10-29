@@ -61,17 +61,20 @@ describe('TvChannelExtension', () => {
 		const {player, eventTarget} = createPlayer();
 		const updates: unknown[] = [];
 		let serverTime = 0;
+		let legacyTime = 0;
 		eventTarget.addEventListener('tv-channel-programme-update', (event) => {
 			updates.push((event as CustomEvent).detail);
 		});
 		eventTarget.addEventListener('tv-channel-server-time-update', (event) => {
 			serverTime = (event as CustomEvent).detail.serverTime;
+			legacyTime = (event as CustomEvent).detail.time;
 		});
 		await initPlayer(player);
 
 		await player.open(tvItem(), {autoplay: false});
 
 		expect(serverTime).toBe(1_500);
+		expect(legacyTime).toBe(1_500);
 		expect(updates).toEqual([{current: programme[0], next: programme[1]}]);
 	});
 

@@ -38,6 +38,10 @@ export class NativeHtml5Adapter implements PlaybackAdapter {
 		video.playsInline = true;
 		video.setAttribute('playsinline', '');
 		video.muted = request.muted;
+		video.style.position = 'relative';
+		video.style.width = '100%';
+		video.style.height = '100%';
+		video.style.objectFit = 'contain';
 		this.bindNativeEvents(video);
 		request.surface.appendChild(video);
 
