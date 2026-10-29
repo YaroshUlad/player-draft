@@ -13,8 +13,8 @@ interface TraceDefinition {
 
 const TRACE: readonly TraceDefinition[] = [
 	{name: 'start_session', positionMs: 0, payload: {stats_version: '2.0.0', stream_profile: 'vod'}},
+	{name: 'play', positionMs: 0},
 	{name: 'ready', positionMs: 1_000, payload: {buffer_time: 0}},
-	{name: 'play', positionMs: 1_000},
 	{name: 'playback_started', positionMs: 1_000, payload: {
 		stats_version: '2.0.0',
 		stream_profile: 'vod',

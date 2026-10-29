@@ -55,7 +55,7 @@ describe('SubtitlesExtension', () => {
 				...fakePlaylistItem.model,
 				subtitles: [{id: 'en', name: 'English', language: 'en', url: '/subtitles.vtt', isDefault: true}]
 			}
-		}, {autoplay: false});
+		});
 
 		factory.adapters[0]?.emit({type: 'timeUpdate', positionMs: 1_500});
 		factory.adapters[0]?.emit({type: 'timeUpdate', positionMs: 2_500});

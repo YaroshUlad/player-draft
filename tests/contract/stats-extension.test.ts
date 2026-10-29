@@ -48,15 +48,17 @@ describe('StatsExtension', () => {
 	it('preserves startup, playback, coverage and shutdown event order', async () => {
 		const {player, factory, clock, outbox, uvTransport, oneTransport} = createPlayer();
 		await initPlayer(player);
-		await player.open(fakePlaylistItem, {autoplay: false});
+		await player.open(fakePlaylistItem);
 
 		expect(outbox.getPending('uv-2025').map((record) => record.payload.event_name)).toEqual([
 			'start_session',
-			'ready'
+			'play',
+			'ready',
+			'playback_started',
+			'telemetry'
 		]);
 
 		const playback = player.getPlaybackInterface();
-		await playback.play();
 		factory.adapters[0]?.emit({type: 'firstBytes'});
 		factory.adapters[0]?.emit({type: 'firstBytes'});
 		factory.adapters[0]?.emit({type: 'firstFrame'});
@@ -71,8 +73,8 @@ describe('StatsExtension', () => {
 		const names = uvTransport.batches.flat().map((record) => record.payload.event_name);
 		expect(names).toEqual([
 			'start_session',
-			'ready',
 			'play',
+			'ready',
 			'playback_started',
 			'telemetry',
 			'first_byte_media',

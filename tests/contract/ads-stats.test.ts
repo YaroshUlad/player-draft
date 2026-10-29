@@ -53,10 +53,10 @@ function itemWithPreroll() {
 }
 
 describe('advertising stats', () => {
-	it('emits UV ad break events without starting content TVT', async () => {
+	it('emits UV ad break events before content playback', async () => {
 		const {player, factory, uvTransport} = createPlayer();
 		await initPlayer(player);
-		const open = player.open(itemWithPreroll(), {autoplay: false});
+		const open = player.open(itemWithPreroll());
 		await vi.waitFor(() => expect(factory.adapters).toHaveLength(1));
 		factory.adapters[0]?.emit({type: 'timeUpdate', positionMs: 500});
 		factory.adapters[0]?.emit({type: 'ended'});
@@ -66,7 +66,7 @@ describe('advertising stats', () => {
 		const events = uvTransport.batches.flat();
 		const names = events.map((event) => event.payload.event_name);
 		expect(names.slice(0, 3)).toEqual(['adv_request', 'adv_break_started', 'adv_break_ended']);
-		expect(names).not.toContain('playback_started');
+		expect(names.indexOf('playback_started')).toBeGreaterThan(names.indexOf('adv_break_ended'));
 		expect(events[0]?.payload).toMatchObject({
 			adv_position: 'preroll',
 			adv_creative_id: 'ad-stats-1',
@@ -91,7 +91,7 @@ describe('advertising stats', () => {
 		};
 		const {player, uvTransport} = createPlayer(factory);
 		await initPlayer(player);
-		await player.open(itemWithPreroll(), {autoplay: false});
+		await player.open(itemWithPreroll());
 		await player.close();
 
 		const names = uvTransport.batches.flat().map((event) => event.payload.event_name);

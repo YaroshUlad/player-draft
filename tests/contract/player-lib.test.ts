@@ -53,28 +53,23 @@ describe('PlayerLib public contract', () => {
 		expect(details[details.length - 1]).toEqual({time: 2_000});
 	});
 
-	it('autoplays by default unless playback settings disable it', async () => {
+	it('always autoplays content on open', async () => {
 		const {player} = createPlayer();
 		await initPlayer(player);
 		const item = {...fakePlaylistItem, playback: {}};
 
 		await player.open(item);
+
 		expect(player.getPlaybackInterface().getState()).toBe('playing');
-
-		await player.open({...item, playback: {isAutoplay: false}});
-		expect(player.getPlaybackInterface().getState()).toBe('ready');
-
-		await player.open({...item, playback: {isAutoplaySettingEnabled: false}});
-		expect(player.getPlaybackInterface().getState()).toBe('ready');
 	});
 
-	it('resumes from startPosition when lastPosition is zero', async () => {
+	it('resumes from startPosition', async () => {
 		const {player} = createPlayer();
 		await initPlayer(player);
 
 		await player.open({
 			...fakePlaylistItem,
-			playback: {startPosition: 5_000, lastPosition: 0, isAutoplay: false}
+			playback: {startPosition: 5_000}
 		});
 
 		expect(player.getPlaybackInterface().getStateInfo().currentTime).toBe(5_000);
@@ -94,8 +89,8 @@ describe('PlayerLib public contract', () => {
 
 		await player.close();
 		expect(playback.getState()).toBe('idle');
-		await player.open(fakePlaylistItem, {autoplay: false});
-		expect(playback.getState()).toBe('ready');
+		await player.open(fakePlaylistItem);
+		expect(playback.getState()).toBe('playing');
 
 		await player.destroy();
 		expect(player.isInitialized()).toBe(false);

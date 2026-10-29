@@ -1,7 +1,6 @@
 import type {PlayerExtension} from '../../../contracts/src/extensions';
 import type {CoreEvent} from '../../../contracts/src/playback';
 import type {PlaylistItem, PlaylistItemModel} from '../../../contracts/src/playlist-item';
-import type {PlaybackOptions} from '../../../contracts/src/public-api';
 import type {StatsOutbox} from './stats-outbox';
 import type {StatEvent, StatEventName, StatsProvider} from './types';
 
@@ -67,7 +66,6 @@ export class StatsExtension implements PlayerExtension {
 	private readonly adSessions = new Map<string, AdStatsSession>();
 	private lastContentSession: StatsSession | null = null;
 	private pendingItem: PlaylistItem | null = null;
-	private pendingOptions: PlaybackOptions | undefined;
 	private readonly autoFlush: boolean;
 	private readonly coverageHeartbeatMs: number;
 	private readonly createVsid: () => string;
@@ -78,9 +76,8 @@ export class StatsExtension implements PlayerExtension {
 		this.createVsid = options.createVsid ?? createVsid;
 	}
 
-	beforeOpen(item: PlaylistItem, options?: PlaybackOptions): void {
+	beforeOpen(item: PlaylistItem): void {
 		this.pendingItem = item;
-		this.pendingOptions = options;
 	}
 
 	onEvent(event: CoreEvent): void {
@@ -96,15 +93,8 @@ export class StatsExtension implements PlayerExtension {
 				stats_version: '2.0.0',
 				stream_profile: event.snapshot.live.isLive ? 'live' : 'vod'
 			});
-			const autoplay = this.pendingOptions?.autoplay ?? Boolean(
-				session.item && this.pendingItem &&
-				this.pendingItem.playback.isAutoplay !== false &&
-				this.pendingItem.playback.isAutoplaySettingEnabled !== false
-			);
-			if (autoplay) {
-				this.emit(session, 'play', {});
-				session.playEmitted = true;
-			}
+			this.emit(session, 'play', {});
+			session.playEmitted = true;
 		}
 		if (!session) {
 			return;
@@ -251,7 +241,6 @@ export class StatsExtension implements PlayerExtension {
 		this.adSessions.clear();
 		this.lastContentSession = null;
 		this.pendingItem = null;
-		this.pendingOptions = undefined;
 		await this.options.outbox.flush();
 	}
 

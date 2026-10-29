@@ -61,14 +61,14 @@ describe('AdsExtension', () => {
 	it('plays preroll and then opens content', async () => {
 		const {player, factory, events} = createPlayer();
 		await initPlayer(player);
-		const open = player.open(itemWithAds('preroll'), {autoplay: false});
+		const open = player.open(itemWithAds('preroll'));
 		await vi.waitFor(() => expect(factory.adapters).toHaveLength(1));
 
 		factory.adapters[0]?.emit({type: 'ended'});
 		await open;
 
 		expect(factory.adapters).toHaveLength(2);
-		expect(player.getPlaybackInterface().getState()).toBe('ready');
+		expect(player.getPlaybackInterface().getState()).toBe('playing');
 		expect(events.map((event) => event.name)).toContain('player-advertisement-start');
 		expect(events.map((event) => event.name)).toContain('player-advertisement-started-playing');
 		expect(events.map((event) => event.name)).toContain('player-advertisement-end');
@@ -78,7 +78,7 @@ describe('AdsExtension', () => {
 	it('resumes content after midroll', async () => {
 		const {player, factory} = createPlayer();
 		await initPlayer(player);
-		await player.open(itemWithAds('midroll'), {autoplay: false});
+		await player.open(itemWithAds('midroll'));
 
 		factory.adapters[0]?.emit({type: 'timeUpdate', positionMs: 5_000});
 		await vi.waitFor(() => expect(factory.adapters).toHaveLength(2));
@@ -86,13 +86,13 @@ describe('AdsExtension', () => {
 		await vi.waitFor(() => expect(factory.adapters).toHaveLength(3));
 
 		expect(player.getPlaybackInterface().getStateInfo().currentTime).toBe(5_000);
-		expect(player.getPlaybackInterface().getState()).toBe('ready');
+		expect(player.getPlaybackInterface().getState()).toBe('playing');
 	});
 
 	it('plays postroll before item ended', async () => {
 		const {player, factory, events} = createPlayer();
 		await initPlayer(player);
-		await player.open(itemWithAds('postroll'), {autoplay: false});
+		await player.open(itemWithAds('postroll'));
 
 		factory.adapters[0]?.emit({type: 'ended'});
 		await vi.waitFor(() => expect(factory.adapters).toHaveLength(2));
@@ -106,14 +106,14 @@ describe('AdsExtension', () => {
 	it('skips an allowed ad through public playback', async () => {
 		const {player, factory} = createPlayer();
 		await initPlayer(player);
-		const open = player.open(itemWithAds('preroll'), {autoplay: false});
+		const open = player.open(itemWithAds('preroll'));
 		await vi.waitFor(() => expect(factory.adapters).toHaveLength(1));
 
 		await player.getPlaybackInterface().skipAdv();
 		await open;
 
 		expect(factory.adapters).toHaveLength(2);
-		expect(player.getPlaybackInterface().getState()).toBe('ready');
+		expect(player.getPlaybackInterface().getState()).toBe('playing');
 	});
 
 	it('continues content after an ad error', async () => {
@@ -129,9 +129,9 @@ describe('AdsExtension', () => {
 		const {player, events} = createPlayer(factory);
 		await initPlayer(player);
 
-		await player.open(itemWithAds('preroll'), {autoplay: false});
+		await player.open(itemWithAds('preroll'));
 
-		expect(player.getPlaybackInterface().getState()).toBe('ready');
+		expect(player.getPlaybackInterface().getState()).toBe('playing');
 		expect(events.map((event) => event.name)).toContain('player-advertisement-error');
 		expect(events.map((event) => event.name)).toContain('player-advertisement-end');
 	});

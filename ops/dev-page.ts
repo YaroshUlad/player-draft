@@ -33,7 +33,7 @@ export function getDevPage(): string {
 				type: 'video',
 				files: {mp4720: '/video.mp4'}
 			},
-			playback: {isAutoplay: true, isAutoplaySettingEnabled: true}
+			playback: {}
 		};
 		const names = [
 			'player-playing', 'player-paused', 'player-time-update', 'player-first-frame',
@@ -60,7 +60,7 @@ export function getDevPage(): string {
 			host: '127.0.0.1',
 			proxyHost: '',
 			node: document.getElementById('player-surface')
-		}).then(() => player.open(item, {autoplay: true, muted: true}));
+		}).then(() => player.open(item, {muted: true}));
 	</script>
 </body>
 </html>`;

@@ -101,15 +101,15 @@ test('native MP4 works through the public facade without UI', async ({page}) => 
 				type: 'video',
 				files: {mp4720: '/video.mp4'}
 			},
-			playback: {startPosition: 500, lastPosition: 0, isAutoplay: false}
-		}, {autoplay: false, muted: true});
+			playback: {startPosition: 500}
+		}, {muted: true});
 	});
 
 	const playbackState = (): Promise<string> => page.evaluate(() => {
 		const browserWindow = window as unknown as E2EWindow;
 		return browserWindow.playerLib.getPlaybackInterface().getState();
 	});
-	await expect.poll(playbackState).toBe('ready');
+	await expect.poll(playbackState).toBe('playing');
 	const readyPosition = await page.evaluate(() => {
 		const browserWindow = window as unknown as E2EWindow;
 		return browserWindow.playerLib.getPlaybackInterface().getStateInfo().currentTime;
@@ -179,10 +179,10 @@ test('native MP4 works through the public facade without UI', async ({page}) => 
 		const browserWindow = window as unknown as E2EWindow;
 		await browserWindow.playerLib.open({
 			model: {rawId: 'local-mp4-reopen', type: 'video', files: {mp4720: '/video.mp4'}},
-			playback: {isAutoplay: false}
-		}, {autoplay: false, muted: true});
+			playback: {}
+		}, {muted: true});
 	});
-	await expect.poll(playbackState).toBe('ready');
+	await expect.poll(playbackState).toBe('playing');
 	await page.evaluate(async () => {
 		const browserWindow = window as unknown as E2EWindow;
 		await browserWindow.playerLib.destroy();
@@ -368,13 +368,9 @@ test('new SDK emits a comparable UV trace without backend delivery', async ({pag
 			},
 			playback: {
 				loop: false,
-				startPosition: 0,
-				lastPosition: 0,
-				isReplay: false,
-				isAutoplay: true,
-				isAutoplaySettingEnabled: true
+				startPosition: 0
 			}
-		}, {autoplay: true});
+		});
 		const playback = player.getPlaybackInterface();
 		await playback.pause();
 		await playback.seek(1_000);
@@ -414,8 +410,8 @@ test('HLS.js plays a local HLS stream through the public facade', async ({page})
 				type: 'video',
 				files: {hls: '/hls/master.m3u8'}
 			},
-			playback: {isAutoplay: true, isAutoplaySettingEnabled: true}
-		}, {autoplay: true, muted: true});
+			playback: {}
+		}, {muted: true});
 	});
 
 	const playbackState = (): Promise<string> => page.evaluate(() => {
@@ -464,8 +460,8 @@ test('Shaka plays local DASH with seek and cleanup', async ({page}) => {
 				type: 'video',
 				files: {dashSep: '/dash/manifest.mpd'}
 			},
-			playback: {isAutoplay: true, isAutoplaySettingEnabled: true}
-		}, {autoplay: true, muted: true});
+			playback: {}
+		}, {muted: true});
 	});
 
 	const playbackState = (): Promise<string> => page.evaluate(() => {

@@ -31,7 +31,6 @@ export interface BuildInfo {
 
 export interface PlaybackOptions {
 	startPositionMs?: number;
-	autoplay?: boolean;
 	muted?: boolean;
 }
 

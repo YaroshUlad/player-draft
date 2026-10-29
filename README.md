@@ -49,7 +49,7 @@ Shaka настроен с `bufferingGoal: 10`, `bufferBehind: 2`, `rebufferingGo
 
 ## Автоплей и video surface
 
-`open()` запускает воспроизведение по умолчанию. Передать `options.autoplay: false`, `playback.isAutoplay: false` или `playback.isAutoplaySettingEnabled: false`, если автозапуск не нужен. Ограничения браузера на звук не обходятся: для автоплея без пользовательского действия может потребоваться `options.muted: true`.
+`open()` всегда запускает воспроизведение после подготовки контента. Публичных флагов `isAutoplay`, `isAutoplaySettingEnabled`, `isReplay` и `options.autoplay` нет: выбор следующего видео и пользовательская политика автопереходов остаются на стороне хоста. Пауза доступна через playback interface. Начальная позиция передается через `startPosition` или `options.startPositionMs`; последняя фактическая позиция хранится внутри SDK для recovery. Ограничения браузера на звук не обходятся: для автоплея без пользовательского действия может потребоваться `options.muted: true`.
 
 Как и в legacy SDK, основной `<video>` монтируется в отдельный `.html5-video-container`, который вставляется первым элементом в `document.body`. Переданный `InitData.node` не используется как video surface, поэтому скрытый UI-слот `player-ds` остается пустым. Контейнер удаляется при `close()`, `shutdown()` и `destroy()`.
 

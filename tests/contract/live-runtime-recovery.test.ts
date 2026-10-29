@@ -33,14 +33,14 @@ describe('runtime recovery', () => {
 		};
 		const player = new PlayerLib({core: new PlaybackCore(factory), eventTarget: new EventTarget()});
 		await initPlayer(player);
-		await player.open(fakePlaylistItem, {autoplay: false});
+		await player.open(fakePlaylistItem);
 
 		factory.adapters[0]?.emit({type: 'timeUpdate', positionMs: 5_000});
 		factory.adapters[0]?.emit({type: 'error', error: {code: 'NETWORK', message: 'network', fatal: true}});
 		await vi.waitFor(() => expect(factory.adapters).toHaveLength(3));
 
 		expect(player.getPlaybackInterface().getStateInfo().currentTime).toBe(5_000);
-		expect(player.getPlaybackInterface().getState()).toBe('ready');
+		expect(player.getPlaybackInterface().getState()).toBe('playing');
 	});
 
 	it('reports recover-fail when runtime candidates are exhausted', async () => {
@@ -111,7 +111,7 @@ describe('LiveExtension', () => {
 			const detail = (event as CustomEvent).detail;
 			transitions.push(`${detail.from}->${detail.to}`);
 		});
-		live.beforeOpen(item, {autoplay: false});
+		live.beforeOpen(item);
 		status = 'started';
 
 		await live.pollLiveStatus();
@@ -119,7 +119,7 @@ describe('LiveExtension', () => {
 
 		expect(transitions).toEqual(['upcoming->started']);
 		expect(reload).toHaveBeenCalledTimes(1);
-		expect(reload).toHaveBeenCalledWith(item, {autoplay: true});
+		expect(reload).toHaveBeenCalledWith(item, {});
 		await live.shutdown();
 	});
 });

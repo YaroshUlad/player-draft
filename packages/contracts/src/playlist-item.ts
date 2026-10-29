@@ -75,10 +75,6 @@ export interface PlaylistItemModel {
 export interface PlaylistItemPlayback {
 	loop?: boolean;
 	startPosition?: number;
-	lastPosition?: number;
-	isReplay?: boolean;
-	isAutoplay?: boolean;
-	isAutoplaySettingEnabled?: boolean;
 }
 
 export interface PlaylistItem {

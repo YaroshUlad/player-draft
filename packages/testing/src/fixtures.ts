@@ -22,9 +22,7 @@ export const fakePlaylistItem: PlaylistItem = {
 		}
 	},
 	playback: {
-		startPosition: 1_000,
-		isAutoplay: true,
-		isAutoplaySettingEnabled: true
+		startPosition: 1_000
 	}
 };
 

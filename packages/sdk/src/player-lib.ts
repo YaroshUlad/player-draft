@@ -169,10 +169,7 @@ export class PlayerLib implements IPlayerLib {
 			throw new Error('Player must be initialized before open');
 		}
 		const source = this.sourcePlanner.getInitialSource(item.model.files, this.capabilities);
-		const autoplay = options.autoplay ?? (
-			item.playback.isAutoplay !== false && item.playback.isAutoplaySettingEnabled !== false
-		);
-		const startPositionMs = options.startPositionMs ?? item.playback.startPosition ?? item.playback.lastPosition ?? 0;
+		const startPositionMs = options.startPositionMs ?? item.playback.startPosition ?? 0;
 		const surface = this.getPlaybackSurface();
 
 		await this.extensionHost.beforeOpen(item, options);
@@ -182,7 +179,7 @@ export class PlayerLib implements IPlayerLib {
 				surface,
 				capabilities: this.capabilities,
 				startPositionMs: recoveryPositionMs ?? startPositionMs,
-				autoplay,
+				autoplay: true,
 				muted: options.muted ?? false,
 				operationId: `open-${++this.operationCounter}`,
 				playbackKind: 'content'

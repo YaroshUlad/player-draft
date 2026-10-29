@@ -49,13 +49,10 @@ describe('RecoveryExtension', () => {
 		});
 		await initPlayer(player);
 
-		await player.open({
-			...fakePlaylistItem,
-			playback: {...fakePlaylistItem.playback, lastPosition: 0}
-		}, {autoplay: false});
+		await player.open(fakePlaylistItem);
 
 		expect(factory.adapters).toHaveLength(2);
-		expect(player.getPlaybackInterface().getState()).toBe('ready');
+		expect(player.getPlaybackInterface().getState()).toBe('playing');
 		expect(player.getPlaybackInterface().getStateInfo().currentTime).toBe(1_000);
 		expect(recoveryFailed).toBe(false);
 	});
@@ -94,7 +91,7 @@ describe('PlaylistExtension', () => {
 			...fakePlaylistItem,
 			playback: {...fakePlaylistItem.playback, loop: true}
 		};
-		await player.open(item, {autoplay: false});
+		await player.open(item);
 
 		factory.adapters[0]?.emit({type: 'ended'});
 		await vi.waitFor(() => expect(factory.adapters).toHaveLength(2));
@@ -112,7 +109,7 @@ describe('PlaylistExtension', () => {
 			endedEvents++;
 		});
 		await initPlayer(player);
-		await player.open(fakePlaylistItem, {autoplay: false});
+		await player.open(fakePlaylistItem);
 
 		factory.adapters[0]?.emit({type: 'ended'});
 

@@ -116,7 +116,7 @@ export class LiveExtension implements PlayerExtension {
 			return;
 		}
 		const generation = ++this.generation;
-		void this.options.reload(item, {...this.currentOptions, autoplay: true}).catch(() => {
+		void this.options.reload(item, this.currentOptions).catch(() => {
 			if (generation === this.generation) {
 				this.options.dispatcher.dispatch('player-recovery-failed', {reason: 'recover-fail'});
 			}

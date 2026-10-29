@@ -31,7 +31,6 @@ export class PlaylistExtension implements PlayerExtension {
 		const generation = ++this.generation;
 		const options: PlaybackOptions = {
 			...this.currentOptions,
-			autoplay: true,
 			startPositionMs: 0
 		};
 		queueMicrotask(() => {

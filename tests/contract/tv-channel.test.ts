@@ -71,7 +71,7 @@ describe('TvChannelExtension', () => {
 		});
 		await initPlayer(player);
 
-		await player.open(tvItem(), {autoplay: false});
+		await player.open(tvItem());
 
 		expect(serverTime).toBe(1_500);
 		expect(legacyTime).toBe(1_500);
@@ -81,7 +81,7 @@ describe('TvChannelExtension', () => {
 	it('opens SCTE-35 midroll and resumes content', async () => {
 		const {player, factory} = createPlayer();
 		await initPlayer(player);
-		await player.open(tvItem(), {autoplay: false});
+		await player.open(tvItem());
 
 		factory.adapters[0]?.emit({type: 'timeUpdate', positionMs: 5_000});
 		await vi.waitFor(() => expect(factory.adapters).toHaveLength(2));
