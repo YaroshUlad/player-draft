@@ -32,7 +32,6 @@ const DEFAULT_CAPABILITIES: DeviceCapabilities = {
 	platform: 'unknown',
 	native: true,
 	vkPlayer: false,
-	hlsJs: false,
 	dashJs: false,
 	mse: false,
 	supportedMimeTypes: []

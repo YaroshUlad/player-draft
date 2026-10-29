@@ -1,6 +1,6 @@
 {
 	"name": "vktv-player-draft",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"private": true,
 	"type": "module",
 	"workspaces": [
@@ -44,7 +44,6 @@
 		"vitest": "^2.1.8"
 	},
 	"dependencies": {
-		"hls.js": "^1.0.5",
 		"shaka-player": "5.3.2",
 		"tslib": "^2.8.1"
 	}

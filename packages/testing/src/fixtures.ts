@@ -4,7 +4,6 @@ export const fakeCapabilities: DeviceCapabilities = {
 	platform: 'test',
 	native: true,
 	vkPlayer: false,
-	hlsJs: true,
 	dashJs: false,
 	mse: true,
 	supportedMimeTypes: []

@@ -386,7 +386,7 @@ test('new SDK emits a comparable UV trace without backend delivery', async ({pag
 	);
 });
 
-test('HLS.js plays a local HLS stream through the public facade', async ({page}) => {
+test('Shaka plays a local HLS stream through the public facade', async ({page}) => {
 	const pageErrors: string[] = [];
 	page.on('pageerror', (error) => pageErrors.push(error.message));
 	await page.goto('/demo');

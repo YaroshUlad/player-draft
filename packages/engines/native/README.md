@@ -15,7 +15,7 @@ Native playback через `HTMLVideoElement` и браузерные media even
 - Реализует first bytes/frame, buffering, timeupdate и media errors.
 - Удаляет только собственный video element, не очищая host-owned children.
 
-Ручное качество и выбор аудио в native adapter ограничены: нужен adaptive adapter или reopen source. Остальные protected extension points используются HLS.js и Shaka adapters.
+Ручное качество и выбор аудио в native adapter ограничены: нужен adaptive adapter или reopen source. Остальные protected extension points используются Shaka adapter.
 
 ## Проверки
 

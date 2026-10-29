@@ -112,7 +112,7 @@ export class SourcePlanner {
 
 		switch (source.format) {
 			case 'hls':
-				return nativeMimeSupported || (capabilities.mse && (capabilities.hlsJs || capabilities.dashJs));
+				return nativeMimeSupported || (capabilities.mse && capabilities.dashJs);
 			case 'dash':
 				return nativeMimeSupported || capabilities.vkPlayer || (capabilities.mse && capabilities.dashJs);
 			case 'cmaf':

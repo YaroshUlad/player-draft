@@ -66,7 +66,6 @@ export interface DeviceCapabilities {
 	platform: string;
 	native: boolean;
 	vkPlayer: boolean;
-	hlsJs: boolean;
 	dashJs: boolean;
 	mse: boolean;
 	supportedMimeTypes: readonly string[];
@@ -83,7 +82,7 @@ export interface PlaybackCapabilities {
 }
 
 export interface EngineSnapshot {
-	type: 'native' | 'vkplayer' | 'hlsjs' | 'dashjs' | 'shaka' | 'fake';
+	type: 'native' | 'vkplayer' | 'dashjs' | 'shaka' | 'fake';
 	version: string;
 }
 

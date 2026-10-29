@@ -20,7 +20,6 @@ Headless Smart TV player SDK на TypeScript. Проект создается о
 | `packages/sdk` | `window.playerLib`, facade, ExtensionHost, CustomEvent и preview |
 | `packages/engines/native` | Native HTML5 playback и capabilities detection |
 | `packages/engines/vk` | VK Player adapter |
-| `packages/engines/hls` | HLS.js adapter |
 | `packages/engines/shaka` | Shaka adapter для DASH и HLS |
 | `packages/infrastructure/http` | Fetch и неблокирующий XHR transports |
 | `packages/extensions/stats` | Статистика, serializers и persistent outbox |
@@ -43,7 +42,7 @@ Headless Smart TV player SDK на TypeScript. Проект создается о
 ## Engine priority
 
 - DASH: Shaka → VK Player → native.
-- HLS: Shaka → hls.js → native.
+- HLS: Shaka → native.
 
 Shaka настроен с `bufferingGoal: 10`, `bufferBehind: 2`, `rebufferingGoal: 2`. После seek буфер очищается через variant switch с `clearBuffer=true, safeMargin=0`, на destroy вызывается `unload(false)`.
 

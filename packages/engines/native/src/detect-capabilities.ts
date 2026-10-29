@@ -1,4 +1,3 @@
-import Hls from 'hls.js';
 import shaka from 'shaka-player';
 import type {DeviceCapabilities} from '../../../contracts/src/playback';
 import {isVkPlayerAvailable} from '../../vk/src/vk-player';
@@ -24,7 +23,6 @@ export function detectDeviceCapabilities(): DeviceCapabilities {
 		platform,
 		native: true,
 		vkPlayer: isVkPlayerAvailable(),
-		hlsJs: Hls.isSupported(),
 		dashJs: shaka.Player.isBrowserSupported(),
 		mse: typeof MediaSource !== 'undefined',
 		supportedMimeTypes

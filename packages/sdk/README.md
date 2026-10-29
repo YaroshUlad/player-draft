@@ -21,7 +21,7 @@ Compatibility facade и composition root headless SDK.
 ## Engine priority
 
 - DASH: Shaka → VK Player → native.
-- HLS: Shaka → hls.js → native.
+- HLS: Shaka → native.
 
 ## Lifecycle
 

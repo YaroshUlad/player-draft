@@ -26,7 +26,6 @@ describe('SourcePlanner', () => {
 		const planner = new SourcePlanner();
 		const sources = planner.plan(files, {
 			...fakeCapabilities,
-			hlsJs: false,
 			dashJs: false,
 			vkPlayer: false,
 			mse: false,
